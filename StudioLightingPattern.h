@@ -64,8 +64,6 @@ class GogglePattern
           ClapUpdate();
         } else if (ActivePattern == "THEATER_CHASE") {
           TheaterChaseUpdate();
-        } else if (ActivePattern == "LOOPY") {
-          LoopyUpdate();
         } else if (ActivePattern == "PARTY") {
           PartyUpdate();
         }else {
@@ -126,13 +124,6 @@ class GogglePattern
       TheaterChase();
     }
 
-    void SetLoopy() {
-      Serial.println("Set Loopy");
-      ActivePattern = "LOOPY";
-      iPattern = 0;
-      Loopy();
-    }
-
     void SetWave() {
       Serial.println("Set Wave");
       ActivePattern = "WAVE";
@@ -157,7 +148,7 @@ class GogglePattern
    private:
    //***************VARIABLES***************//
     // Settings
-    String Patterns[PATTERN_COUNT] = { "LOOPY", "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "CLAP", "PARTY" };
+    String Patterns[PATTERN_COUNT] = { "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "CLAP", "PARTY" };
 
     String ActivePattern;
     Themes ActiveTheme;
@@ -185,7 +176,6 @@ class GogglePattern
     bool ColorWipeEnabled = true;
     bool WaveEnabled = true;
     bool ClapEnabled = true;
-    bool LoopyEnabled = true;
     bool PartyEnabled = true;
 
     // Indices
@@ -199,7 +189,6 @@ class GogglePattern
     double RainbowInterval = 5;
     double WipeInterval = 50;
     double ChaseInterval = 50;
-    double LoopyInterval = 50;
     double WaveInterval = 50;
     double ClapInterval = 50;
     double PartyInterval = 50;
@@ -261,7 +250,6 @@ class GogglePattern
           Reverse();
           NextColor();
         } else if (ActivePattern == "THEATER_CHASE"
-          || ActivePattern == "LOOPY"
           || ActivePattern == "WAVE"
           || ActivePattern == "CLAP") {
           NextColor();
@@ -284,7 +272,6 @@ class GogglePattern
       RainbowInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET;
       WipeInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET; //(4 beats)
       ChaseInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
-      LoopyInterval = (((BPM * 60) / TotalLeds) / 4) - LAG_OFFSET;
       WaveInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET; //(4 beats)
       ClapInterval = (((BPM * 60) / (COLUMNS/2)) / 16) - LAG_OFFSET; // (1 beat)
       PartyInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
@@ -375,14 +362,12 @@ class GogglePattern
           Clap();
         } else if (ActivePattern == "THEATER_CHASE") {
           TheaterChase();
-        } else if (ActivePattern == "LOOPY") {
-          Loopy();
         } else if (ActivePattern == "PARTY") {
           Party();
         } else {
-          ActivePattern = "LOOPY";
+          ActivePattern = "RAINBOW_CYCLE";
           iPattern = 0;
-          Loopy();
+          RainbowCycle();
         }
       }
     }
@@ -420,8 +405,6 @@ class GogglePattern
         return ClapEnabled;
       } else if (pattern == "THEATER_CHASE") {
         return TheaterChaseEnabled;
-      } else if (pattern == "LOOPY") {
-        return LoopyEnabled;
       } else if (pattern == "PARTY") {
         return PartyEnabled;
       } else { 
@@ -494,26 +477,6 @@ class GogglePattern
       Increment();
     }
 
-    // Initialize for a ColorWipe
-    void Loopy()
-    {
-      Serial.println("Begin LOOPY");
-      UpdateInterval = LoopyInterval;
-      TotalRotations = 1;
-      TotalSteps = TotalLeds;
-      Index = 0;
-    }
-
-    // Update the Loopy Pattern
-    void LoopyUpdate()
-    {
-        ClearLights();
-        SetPixel(Index);
-        SetPixel(TotalLeds - Index);
-        FastLED.show();
-        Increment();
-    }
-
     void Wave()
     {
       Serial.println("Begin WAVE");
@@ -523,7 +486,7 @@ class GogglePattern
       Index = 0;
     }
 
-    // Update the Loopy Pattern
+    // Update the Wave Pattern
     void WaveUpdate()
     {
         ClearLights();

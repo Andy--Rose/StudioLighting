@@ -87,9 +87,9 @@ void remoteCommand() {
     goggles.SetTheaterChase();
   }
   else if (results.value == 0x4 || results.value == 0x804) { // -4-
-    Serial.println("Loopy");
+//    Serial.println("Loopy");
     goggles.LockPattern();
-    goggles.SetLoopy();
+//    goggles.SetLoopy();
   } 
   else if (results.value == 0x5 || results.value == 0x805) { // -5-
     Serial.println("Wave");
@@ -117,7 +117,6 @@ void test() {
 //  goggles.SetRainbow();
 //  goggles.SetColorWipe();
 //  goggles.SetTheaterChase();
-//  goggles.SetLoopy();
 //  goggles.SetWave();
 //    goggles.SetClap();
 //  goggles.SetParty();
