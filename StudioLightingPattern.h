@@ -5,14 +5,13 @@
 
 enum Themes { NORMAL, HALLOWEEN, CHRISTMAS };
 
-#define COLUMNS 13
-#define ROWS 4
-#define CHASE_SECTION_SIZE 3
+#define COLUMNS 5
+#define CHASE_SECTION_SIZE 5
 #define COLOR_INTERVAL 40
 #define LAG_OFFSET 2
 #define PATTERN_COUNT 7
 
-#define WAVE_FADE_SIZE 10   // Size of the fade trailWaveEnabled
+#define WAVE_FADE_SIZE 15   // Size of the fade trailWaveEnabled
 
 const TProgmemPalette16 themePalette_p PROGMEM;
 
@@ -189,24 +188,7 @@ class StudioLightingPattern
     unsigned long lastUpdate;   // last update of position
     unsigned long this_time = millis();
     unsigned long changed_time = this_time - (PatternInterval * 1000);  // Set to init right away
-    unsigned long colored_time = this_time;
-    
-    int design[13][4] = {
-      {0, 1, 2, 0},
-      {0, 3, 4, 5},
-      {0, 6, 7, 8},
-      {9, 10, 11, 12},
-      {0, 13, 14, 15},
-      {0, 0, 16, 17},
-      {0, 18, 19, 20},
-      {21, 22, 23, 24},
-      {25, 26, 27, 28},
-      {29, 30, 31, 32},
-      {0, 33, 34, 35},
-      {0, 36, 37, 38},
-      {0, 39, 40, 0}
-    };
-    
+    unsigned long colored_time = this_time;    
  
     //***************UTILITY METHODS***************//
     // Increment the Index and reset at the end
