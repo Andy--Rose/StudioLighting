@@ -63,7 +63,9 @@ class StudioLightingPattern
           TheaterChaseUpdate();
         } else if (ActivePattern == "PARTY") {
           PartyUpdate();
-        }else {
+        } else if (ActivePattern == "SLOW_FADE") {
+          SlowFadeUpdate();
+        } else {
           // do nothing
         }
       }
@@ -135,10 +137,17 @@ class StudioLightingPattern
       Party();
     }
 
+    void SetSlowFade() {
+      Serial.println("Set Slow Fade");
+      ActivePattern = "SLOW_FADE";
+      iPattern = 5;
+      SlowFade();
+    }
+
    private:
    //***************VARIABLES***************//
     // Settings
-    String Patterns[PATTERN_COUNT] = { "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "PARTY" };
+    String Patterns[PATTERN_COUNT] = { "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "PARTY", "SLOW_FADE" };
 
     String ActivePattern;
     Themes ActiveTheme;
@@ -166,6 +175,7 @@ class StudioLightingPattern
     bool ColorWipeEnabled = true;
     bool WaveEnabled = true;
     bool PartyEnabled = true;
+    bool SlowFadeEnabled = true;
 
     // Indices
     uint16_t Index = 0;
@@ -180,6 +190,7 @@ class StudioLightingPattern
     double ChaseInterval = 50;
     double WaveInterval = 50;
     double PartyInterval = 50;
+    double SlowFadeInterval = 50;
 
     // Timing
     int BPM = 128;
@@ -244,6 +255,7 @@ class StudioLightingPattern
       ChaseInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
       WaveInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET; //(4 beats)
       PartyInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
+      SlowFadeInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
     }
 
     //***************COLOR METHODS***************//
@@ -331,6 +343,8 @@ class StudioLightingPattern
           TheaterChase();
         } else if (ActivePattern == "PARTY") {
           Party();
+        } else if (ActivePattern == "SLOW_FADE") {
+          SlowFade();
         } else {
           ActivePattern = "RAINBOW_CYCLE";
           iPattern = 0;
@@ -372,6 +386,8 @@ class StudioLightingPattern
         return TheaterChaseEnabled;
       } else if (pattern == "PARTY") {
         return PartyEnabled;
+      } else if (pattern == "SLOW_FADE") {
+        return SlowFadeEnabled;
       } else { 
         return true;
       }
@@ -491,6 +507,27 @@ class StudioLightingPattern
         SetPixel(i);
         NextColor(30);
       }
+      FastLED.show();
+      Increment();
+    }
+
+    // Initialize for a ColorWipe
+    void SlowFade(){
+      Serial.println("Begin COLOR_WIPE");
+      currentPalette = RainbowColors_p;
+      currentBlending = LINEARBLEND;
+      UpdateInterval = SlowFadeInterval;
+      TotalRotations = 1;
+      TotalSteps = 255;
+      Index = 0;
+    }
+
+    // Update the Color Wipe Pattern
+    void SlowFadeUpdate(){
+      for(int i=0; i<TotalLeds; i++){
+        leds[i] = ColorFromPalette(currentPalette, iColor, ActiveBrightness, currentBlending);
+      }
+      NextColor(1);
       FastLED.show();
       Increment();
     }

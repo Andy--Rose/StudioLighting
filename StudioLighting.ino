@@ -87,9 +87,9 @@ void remoteCommand() {
     lighting.SetTheaterChase();
   }
   else if (results.value == 0x4 || results.value == 0x804) { // -4-
-//    Serial.println("Loopy");
+    Serial.println("Slow Fade");
     lighting.LockPattern();
-//    lighting.SetLoopy();
+    lighting.SetSlowFade();
   } 
   else if (results.value == 0x5 || results.value == 0x805) { // -5-
     Serial.println("Wave");
@@ -111,7 +111,7 @@ void remoteCommand() {
 void test() {
 //  Serial.println("Entering test mode");
   // Test Patterns
-//  lighting.LockPattern();
+  lighting.LockPattern();
 
   // Test methods
 //  lighting.SetRainbow();
@@ -119,5 +119,6 @@ void test() {
 //  lighting.SetTheaterChase();
 //  lighting.SetWave();
 //  lighting.SetParty();
+  lighting.SetSlowFade();
 }
 
