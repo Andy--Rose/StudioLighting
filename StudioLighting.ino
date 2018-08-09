@@ -17,7 +17,7 @@
 
 #define PIN_LEDS 10
 #define PIN_REMOTE 6
-#define LEDS 40
+#define LEDS 65
 
 CRGB leds[LEDS];
 GogglePattern goggles = GogglePattern(LEDS, leds);
