@@ -16,11 +16,11 @@ enum Themes { NORMAL, HALLOWEEN, CHRISTMAS };
 
 const TProgmemPalette16 themePalette_p PROGMEM;
 
-class GogglePattern
+class StudioLightingPattern
 {
   public:    
     // Constructor - calls base-class constructor to initialize strip
-    GogglePattern(uint16_t pixels, CRGB* ledAlloc)
+    StudioLightingPattern(uint16_t pixels, CRGB* ledAlloc)
     {
       TotalSteps = pixels;
       TotalLeds = pixels;
@@ -227,25 +227,25 @@ class GogglePattern
         Index++;
         if (Index == TotalSteps){
           Index = TotalSteps - 1;
-          GogglesComplete(); // call the comlpetion callback
+          PatternComplete(); // call the comlpetion callback
         }
       }
       else { // reverse
         Index--;
         if (Index == 0){
-          GogglesComplete(); // call the comlpetion callback
+          PatternComplete(); // call the comlpetion callback
         }
       }
     }
 
-    void GogglesComplete()
+    void PatternComplete()
     {
       if (iRotation + 1 < TotalRotations){
            iRotation++;
            if (GoingForward) { Index = 0; } else { Index = TotalSteps; }
       } else {
         iRotation = 0;
-//        Serial.println("GogglesComplete");
+//        Serial.println("PatternComplete");
         if (ActivePattern == "COLOR_WIPE") {
           Reverse();
           NextColor();

@@ -12,7 +12,7 @@
 */
 
 #include <FastLED.h>
-#include "GogglePattern.h"
+#include "StudioLightingPattern.h"
 #include <IRremote.h>
 
 #define PIN_LEDS 10
@@ -20,7 +20,7 @@
 #define LEDS 65
 
 CRGB leds[LEDS];
-GogglePattern goggles = GogglePattern(LEDS, leds);
+StudioLightingPattern lighting = StudioLightingPattern(LEDS, leds);
 
 IRrecv irrecv(PIN_REMOTE);
 decode_results results;
@@ -35,7 +35,7 @@ void setup() {
   
   FastLED.addLeds<NEOPIXEL, PIN_LEDS>(leds, LEDS);
   FastLED.show();
-  goggles.Init(NORMAL, 255);
+  lighting.Init(NORMAL, 255);
 
   test();
 }
@@ -48,7 +48,7 @@ void loop() {
    irrecv.resume(); // Receive the next value
   }
   if (LightsActive) {
-    goggles.Update();
+    lighting.Update();
   }
 }
 
@@ -56,69 +56,69 @@ void remoteCommand() {
   if (results.value == 0xC || results.value == 0x80C) { // -PWR-
     Serial.println("Power");
     LightsActive = !LightsActive;
-    if(!LightsActive) { goggles.ClearLights(); }
+    if(!LightsActive) { lighting.ClearLights(); }
     if (LightsActive) { Serial.println("ON"); } else { Serial.println("OFF"); }
   }
   else if (results.value == 0xD || results.value == 0x80D) { // -Mute/Unmute- (only unlocks because choosing a pattern will lock it)
     Serial.println("Rotate Pattern");
-    goggles.UnlockPattern();
+    lighting.UnlockPattern();
   }
   else if (results.value == 0x20 || results.value == 0x820) { // -CH+-
     Serial.println("NextPattern");
-    goggles.NextPattern();
+    lighting.NextPattern();
   }
   else if (results.value == 0x21 || results.value == 0x821) { // -CH--
     Serial.println("PreviousPattern");
-    goggles.PreviousPattern();
+    lighting.PreviousPattern();
   }
   else if (results.value == 0x1 || results.value == 0x801) { // -1-
     Serial.println("Rainbow");
-    goggles.LockPattern();
-    goggles.SetRainbow();
+    lighting.LockPattern();
+    lighting.SetRainbow();
   }
   else if (results.value == 0x2 || results.value == 0x802) { // -2-
     Serial.println("Color Wipe");
-    goggles.LockPattern();
-    goggles.SetColorWipe();
+    lighting.LockPattern();
+    lighting.SetColorWipe();
   }
   else if (results.value == 0x3 || results.value == 0x803) { // -3-
     Serial.println("Theater Chase");
-    goggles.LockPattern();
-    goggles.SetTheaterChase();
+    lighting.LockPattern();
+    lighting.SetTheaterChase();
   }
   else if (results.value == 0x4 || results.value == 0x804) { // -4-
 //    Serial.println("Loopy");
-    goggles.LockPattern();
-//    goggles.SetLoopy();
+    lighting.LockPattern();
+//    lighting.SetLoopy();
   } 
   else if (results.value == 0x5 || results.value == 0x805) { // -5-
     Serial.println("Wave");
-    goggles.LockPattern();
-    goggles.SetWave();
+    lighting.LockPattern();
+    lighting.SetWave();
   }
   else if (results.value == 0x6 || results.value == 0x806) { // -6-
     Serial.println("Clap");
-    goggles.LockPattern();
-    goggles.SetClap();
+    lighting.LockPattern();
+    lighting.SetClap();
   }
   else if (results.value == 0x7 || results.value == 0x807) { // -7-
     Serial.println("Party");
-    goggles.LockPattern();
-    goggles.SetParty();
+    lighting.LockPattern();
+    lighting.SetParty();
   }
 }
 
 void test() {
 //  Serial.println("Entering test mode");
   // Test Patterns
-//  goggles.LockPattern();
+//  lighting.LockPattern();
 
   // Test methods
-//  goggles.SetRainbow();
-//  goggles.SetColorWipe();
-//  goggles.SetTheaterChase();
-//  goggles.SetWave();
-//    goggles.SetClap();
-//  goggles.SetParty();
+//  lighting.SetRainbow();
+//  lighting.SetColorWipe();
+//  lighting.SetTheaterChase();
+//  lighting.SetWave();
+//    lighting.SetClap();
+//  lighting.SetParty();
 }
 
