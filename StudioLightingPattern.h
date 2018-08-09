@@ -60,8 +60,6 @@ class StudioLightingPattern
           ColorWipeUpdate();
         } else if (ActivePattern == "WAVE") {
           WaveUpdate();
-        } else if (ActivePattern == "CLAP") {
-          ClapUpdate();
         } else if (ActivePattern == "THEATER_CHASE") {
           TheaterChaseUpdate();
         } else if (ActivePattern == "PARTY") {
@@ -106,49 +104,42 @@ class StudioLightingPattern
     void SetRainbow() {
       Serial.println("Set Rainbow");
       ActivePattern = "RAINBOW_CYCLE";
-      iPattern = 1;
+      iPattern = 0;
       RainbowCycle();
     }
 
     void SetColorWipe() {
       Serial.println("Set Colorwipe");
       ActivePattern = "COLOR_WIPE";
-      iPattern = 2;
+      iPattern = 1;
       ColorWipe();
     }
 
     void SetTheaterChase() {
       Serial.println("Set Theater Chase");
       ActivePattern = "THEATER_CHASE";
-      iPattern = 3;
+      iPattern = 2;
       TheaterChase();
     }
 
     void SetWave() {
       Serial.println("Set Wave");
       ActivePattern = "WAVE";
-      iPattern = 4;
+      iPattern = 3;
       Wave();
-    }
-
-    void SetClap() {
-      Serial.println("Set Clap");
-      ActivePattern = "CLAP";
-      iPattern = 5;
-      Clap();
     }
 
     void SetParty() {
       Serial.println("Set Party");
       ActivePattern = "PARTY";
-      iPattern = 6;
+      iPattern = 4;
       Party();
     }
 
    private:
    //***************VARIABLES***************//
     // Settings
-    String Patterns[PATTERN_COUNT] = { "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "CLAP", "PARTY" };
+    String Patterns[PATTERN_COUNT] = { "RAINBOW_CYCLE", "COLOR_WIPE", "THEATER_CHASE", "WAVE", "PARTY" };
 
     String ActivePattern;
     Themes ActiveTheme;
@@ -175,7 +166,6 @@ class StudioLightingPattern
     bool RainbowCycleEnabled = true;
     bool ColorWipeEnabled = true;
     bool WaveEnabled = true;
-    bool ClapEnabled = true;
     bool PartyEnabled = true;
 
     // Indices
@@ -190,7 +180,6 @@ class StudioLightingPattern
     double WipeInterval = 50;
     double ChaseInterval = 50;
     double WaveInterval = 50;
-    double ClapInterval = 50;
     double PartyInterval = 50;
 
     // Timing
@@ -250,8 +239,7 @@ class StudioLightingPattern
           Reverse();
           NextColor();
         } else if (ActivePattern == "THEATER_CHASE"
-          || ActivePattern == "WAVE"
-          || ActivePattern == "CLAP") {
+          || ActivePattern == "WAVE") {
           NextColor();
           Index = 0;
         } else {
@@ -273,7 +261,6 @@ class StudioLightingPattern
       WipeInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET; //(4 beats)
       ChaseInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
       WaveInterval = (((BPM * 60) / TotalLeds) / 4)  - LAG_OFFSET; //(4 beats)
-      ClapInterval = (((BPM * 60) / (COLUMNS/2)) / 16) - LAG_OFFSET; // (1 beat)
       PartyInterval = ((BPM * 60) / TotalLeds) - LAG_OFFSET;
     }
 
@@ -358,8 +345,6 @@ class StudioLightingPattern
           ColorWipe();
         } else if (ActivePattern == "WAVE") {
           Wave();
-        } else if (ActivePattern == "CLAP") {
-          Clap();
         } else if (ActivePattern == "THEATER_CHASE") {
           TheaterChase();
         } else if (ActivePattern == "PARTY") {
@@ -401,8 +386,6 @@ class StudioLightingPattern
         return ColorWipeEnabled;
       } else if (pattern == "WAVE") {
         return WaveEnabled;
-      } else if (pattern == "CLAP") {
-        return ClapEnabled;
       } else if (pattern == "THEATER_CHASE") {
         return TheaterChaseEnabled;
       } else if (pattern == "PARTY") {
@@ -508,35 +491,6 @@ class StudioLightingPattern
 
         FastLED.show();
         Increment();
-    }
-
-    void Clap(){
-      Serial.println("Begin CLAP");
-      ActivePattern = "CLAP";
-      UpdateInterval = ClapInterval;
-      TotalRotations = 4;
-      TotalSteps = COLUMNS / 2;
-      Index = 0;
-    }
-
-    // Update the Theater Chase Pattern
-    void ClapUpdate(){
-      if (Index == 0) {
-        for (int i=0; i<TotalLeds; i++) {
-          SetPixel(i,0);
-        }
-        FastLED.show();
-      }
-      for (int j=0; j<ROWS; j++) {
-        if (design[Index][j] != 0) {
-          SetPixel(design[Index][j]-1);
-        }
-        if (design[COLUMNS-Index][j] != 0) {
-          SetPixel(design[COLUMNS-Index-1][j]-1);
-        }
-      }
-      FastLED.show();
-      Increment();
     }
 
     // Initialize for a Theater Chase

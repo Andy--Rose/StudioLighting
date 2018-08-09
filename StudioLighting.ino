@@ -97,9 +97,9 @@ void remoteCommand() {
     lighting.SetWave();
   }
   else if (results.value == 0x6 || results.value == 0x806) { // -6-
-    Serial.println("Clap");
+//    Serial.println("Clap");
     lighting.LockPattern();
-    lighting.SetClap();
+//    lighting.SetClap();
   }
   else if (results.value == 0x7 || results.value == 0x807) { // -7-
     Serial.println("Party");
@@ -118,7 +118,6 @@ void test() {
 //  lighting.SetColorWipe();
 //  lighting.SetTheaterChase();
 //  lighting.SetWave();
-//    lighting.SetClap();
 //  lighting.SetParty();
 }
 
